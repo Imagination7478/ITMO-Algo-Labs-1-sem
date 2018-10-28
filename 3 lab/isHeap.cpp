@@ -2,25 +2,6 @@
 #include <vector>
 using namespace std;
 
-bool isParent(vector<int> arr, int parent)
-{
-	int indexOfFirstChild = 2 * parent + 1;
-	int indexOfSecondChild = 2 * parent + 2;
-	
-	if (indexOfFirstChild >= arr.size())
-	{}
-	else if (indexOfSecondChild >= arr.size())
-	{}
-	else if (arr[indexOfFirstChild] > arr[parent] && arr[indexOfSecondChild] > arr[parent])
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-	
-}
 int main()
 {
 	fstream fs;
@@ -39,19 +20,48 @@ int main()
 	fs.close();
 	
 	fs.open("isheap.out", fstream::out);
-	for(int i = 0; i < size; i++)
+
+	bool result = true;
+
+	for(int i = size - 1; i > 0; i--)
 	{
-		if (isParent(arr, i))
-		{}
-		else 
+		if (i % 2 == 0)
 		{
-			fs << "NO";
-			break;
+			if (arr[(i + 1) / 2 - 1] < arr[i])
+			{
+				result *= true;
+			}
+			else
+			{
+				result *= false;
+			}
 		}
-		if (i == size - 1) { fs << "YES"; }
+		else
+		{
+			if (arr[(i + 1) / 2 - 1] < arr[i])
+			{
+				result *= true;
+			}
+			else
+			{
+				result *= false;
+			}
+		}
+
 	}
+
+	if (result)
+	{
+		fs << "YES";
+	}
+	else
+	{
+		fs << "NO";
+	}
+
 	fs.close();
-	
+
+
 	
 	return 0;
 }

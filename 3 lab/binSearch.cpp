@@ -2,71 +2,85 @@
 #include <vector>
 using namespace std;
 
+int rBinSearch(int arr[], int key, int size)
+{
+	int left = 0, right = size - 1;
+	while (left < right)
+	{
+		int mid = (right + left) / 2 + 1;
+		if (key >= arr[mid]) 		
+		{
+			left = mid; 	
+		}
+		else 		
+		{
+			right = mid - 1;	 
+		}
+	}
+	if (arr[left] == key) { return left; }
+	else { return -1; }
+}
 
-int binSearch (vector<int> arr, int left, int right, int key) 
-{ 	
-	int mid = 0; 	
-	while (1) 	
-	{ 		
-		mid = (left + right) / 2; 		 		
-		if (key < arr[mid]) // если искомое меньше значения в ячейке 		
+int lBinSearch(int arr[], int key, int size)
+{
+	int left = 0, right = size - 1;
+	while (left < right)
+	{
+		int mid = (left + right) / 2;
+		if (key <= arr[mid]) 	
 		{
-			right = mid - 1; // смещаем правую границу поиска 		
+			right = mid;  		
 		}
-		else if (key > arr[mid]) // если искомое больше значения в ячейке 			
+		else 	
 		{
-			left = mid + 1;	 // смещаем левую границу поиска 		
+			left = mid + 1;		
 		}
-		else // иначе (значения равны) 			
-		{
-			return mid; // функция возвращает индекс ячейки 		
-		}
-		if (left > right) // если границы сомкнулись 			
-		{
-			return -1; 
-		}	
-	} 
-} 
+	}
+	if (arr[left] == key) { return left; }
+	else { return -1; }
+}
 
 int main()
 {
-	fstream fs;
-	fs.open("binsearch.in", fstream::in);
+	fstream fopen;
+	fopen.open("binsearch.in", fstream::in);
+
 	int sizeOfArr;
-	fs >> sizeOfArr;
-	
-	vector<int> arr(sizeOfArr);
-	for(int i = 0; i < sizeOfArr; i++)
+	fopen >> sizeOfArr;
+
+	int *ptrArr = new int[sizeOfArr];
+	for (int i = 0; i < sizeOfArr; i++)
 	{
-		fs >> arr[i];
+		int var;
+		fopen >> var;
+		ptrArr[i] = var;
 	}
-	
 	int sizeOfRequest;
-	fs >> sizeOfRequest;
-	
-	vector<int> arrOfRequest(sizeOfRequest);
-	for(int i = 0; i < sizeOfRequest; i++)
+	fopen >> sizeOfRequest;
+
+	fstream fclose;
+	fclose.open("binsearch.out", fstream::out);
+
+	for (int k = 0; k < sizeOfRequest; k++)
 	{
-		fs >> arrOfRequest[i];
-	}
-	fs.close();
-	
-	for(int i = 0; i < sizeOfRequest; i++)
-	{
-		// binSearch(arr, 0, arr.size() - 1, arrOfRequest[i]);
-		if(i == 0)
+		int key;
+		fopen >> key;
+		int first = lBinSearch(ptrArr, key, sizeOfArr);
+		int last = rBinSearch(ptrArr, key, sizeOfArr);
+
+		if (first != -1)
 		{
-			int first = binSearch(arr, 0, arr.size() - 1, arrOfRequest[i]);
+			first++;
+			last++;
 		}
-		else if(arr[i] == arr[i - 1])
-		{
-			int last = binSearch(arr, 0, arr.size() - 1, arrOfRequest[i]);
-		}
-		
+		fclose << first;
+		fclose << " ";
+		fclose << last << endl;
 	}
-	
-	
-	
+
+	delete[] ptrArr;
+	fopen.close();
+	fclose.close();
+
 	return 0;
 }
-    
